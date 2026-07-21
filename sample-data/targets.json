@@ -1,0 +1,25 @@
+{
+  "units": "lb",
+  "calorie_target": 2100,
+  "calorie_band": [
+    1950,
+    2250
+  ],
+  "protein_floor_g": 150,
+  "step_floor": 8000,
+  "sleep_floor_hrs": 7,
+  "weight_change_target_pct_bw_per_wk": -0.5,
+  "training_days": 4,
+  "mode": "standard",
+  "medications_affecting_hr": false,
+  "derived": {
+    "rmr": 1815,
+    "tdee_est": 2650,
+    "tdee_observed": null
+  },
+  "safety": {
+    "min_calories": 1500,
+    "max_loss_rate_pct_bw_wk": 1.0,
+    "min_bodyfat_target_pct": 8
+  }
+}

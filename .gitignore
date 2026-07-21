@@ -1,0 +1,16 @@
+# Your health data is yours. None of it belongs in a public repo.
+health/
+!health/.gitkeep
+
+# Shipped demo data lives in sample-data/, deliberately outside health/ so that
+# "health/ is ignored" stays a rule with no exceptions.
+
+.DS_Store
+__pycache__/
+*.pyc
+*.tmp
+
+# Internal planning docs never ship.
+PLAN.md
+NOTES.md
+*-PLAN.md
