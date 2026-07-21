@@ -61,7 +61,7 @@ coaching, and it won't pretend to be.
 newer (macOS already has it).
 
 ```bash
-git clone https://github.com/YOURNAME/baseline.git
+git clone https://github.com/wheresmycoffee11/baseline.git
 cd baseline
 bash setup.sh --global
 ```
