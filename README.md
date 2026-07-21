@@ -63,57 +63,80 @@ newer (macOS already has it).
 ```bash
 git clone https://github.com/YOURNAME/baseline.git
 cd baseline
-bash setup.sh
-claude
+bash setup.sh --global
 ```
 
-Then type `/coach-setup` and answer the questions. It takes about ten minutes and covers
-your goal, your equipment, your schedule, and a short health screen.
+Then open Claude Code **anywhere** and run `/coach-setup`. About ten minutes of questions
+covering your goal, your equipment, your schedule, and a short health screen.
+
+### Two ways to install
+
+**Global — recommended.** `bash setup.sh --global` puts the five commands in
+`~/.claude/skills/` and your data in `~/.baseline/health/`. Baseline then works from any
+directory, forever, including from whatever project you happen to have open. Remove it
+later with `bash setup.sh --uninstall`, which leaves your data alone.
+
+**Local.** `bash setup.sh` keeps everything inside the cloned folder. Nothing touches the
+rest of your machine — but **Claude Code only sees the commands when you run it from
+inside that folder.** Open Claude anywhere else and `/coach-review` simply won't exist.
+That surprises people, so pick global unless you have a reason not to.
+
+Either way, re-running setup is safe. It replaces program files and never touches
+`health/`.
 
 ### Getting your data in
 
-Baseline uses two Apple Health exports for two different jobs.
+Two Apple Health exports, doing two different jobs. **Start with the free one.**
 
-**Health Auto Export — your daily driver.**
-[Health Auto Export](https://apps.apple.com/app/health-auto-export/id1115567069) is a
-third-party iOS app that writes small daily JSON files. It's the only practical way to
-keep this current, so set it to save into `health/data/inbox/` and let it run.
+**Stock export — free, and enough on its own.**
 
-Enable at minimum:
+On your iPhone: Health → your photo (top right) → Export All Health Data. You get an
+`export.zip`, often a large one. Drop it in `health/data/inbox/` and run `/coach-import`.
+
+Do this on day one. Baseline refuses to give real advice on less than two weeks of data,
+so without a backfill your first useful review is a fortnight away — which is exactly
+when people abandon a new system. With it, you get a real review immediately, measured
+against months or years of your own history.
+
+The catch is that it's a full dump every time. Minutes to generate, no automation. Fine
+weekly, tedious daily.
+
+**Health Auto Export — paid, and worth it if you'll use this daily.**
+
+[Health Auto Export](https://apps.apple.com/app/health-auto-export/id1115567069) writes
+small daily JSON files and can do it automatically in the background.
+
+**Be aware of the cost before you commit.** The free tier gives you widgets and an in-app
+dashboard and *no export at all*. Exporting needs a paid tier; background automation —
+the part that makes a daily habit effortless — needs Premium, sold as a subscription or a
+one-time lifetime purchase. There's a seven-day trial.
+
+Nobody is locked out by this. The stock export path is free and fully supported. You're
+buying convenience, not capability.
+
+If you do use it, point its output at `health/data/inbox/` and enable at minimum:
 
 `weight_body_mass` · `body_fat_percentage` · `lean_body_mass` ·
 **`heart_rate_variability`** · **`resting_heart_rate`** · `sleep_analysis` ·
 `step_count` · `active_energy` · `basal_energy_burned` · `apple_exercise_time` ·
 `dietary_energy` · `protein` · `carbohydrates` · `total_fat` · `fiber`
 
-Do not skip HRV and resting heart rate. They're off by default in some configurations,
-and they're what the recovery logic runs on. Without them Baseline can't tell an
-under-recovered week from a lazy one, and it will never tell you it's missing them
-because absent data looks identical to a rest day.
+Do not skip HRV and resting heart rate. They're off in some configurations, and they're
+what the recovery logic runs on. Without them Baseline can't tell an under-recovered week
+from a lazy one — and it won't know to tell you, because missing data looks identical to
+a rest day.
 
-**Stock export — your history, once.** On your iPhone: Health → your photo (top right) →
-Export All Health Data. You'll get an `export.zip`, possibly a large one. Drop it in
-`health/data/inbox/` and run `/coach-import`.
+### The loop
 
-This is worth doing on day one. Baseline refuses to give real advice on less than two
-weeks of data, so without a backfill your first useful review is a fortnight away —
-which is precisely when people abandon a new system. With it, you get a real review
-immediately, measured against months of your own history.
-
-Don't try to use the stock export daily. It's a full dump that takes minutes to generate
-and can run past 500MB. That's what Auto Export is for.
-
-### The daily loop
-
-Drop your files in, then:
+Drop new files in, then:
 
 ```
-/coach-import        # takes ten seconds
+/coach-import        # ten seconds
 ```
 
-Do it daily, even though weekly would technically suffice. The point isn't the import,
-it's that you look at the numbers often enough for them to stay real to you. Data you
-sync once a month is data you've already stopped acting on.
+Daily if you can, even though weekly would do. The point isn't the sync — it's staying in
+contact with the numbers often enough for them to stay real to you. Data you look at once
+a month is data you've already stopped acting on.
 
 Then weekly:
 

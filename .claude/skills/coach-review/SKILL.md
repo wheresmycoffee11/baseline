@@ -16,9 +16,9 @@ The skill this pack exists for. Everything else feeds it.
    re-recommend something already in flight.
 5. `health/journal.md`, recent entries — the context the numbers can't carry.
 
-Pull in `reference/nutrition-principles.md`, `training-principles.md`, or
-`recovery-principles.md` when a recommendation touches them. Don't read all three by
-reflex.
+Pull in `reference/nutrition-principles.md`, `reference/training-principles.md`, or
+`reference/recovery-principles.md` when a recommendation touches them. Don't read all
+three by reflex.
 
 ## Step 1 — Run the numbers
 

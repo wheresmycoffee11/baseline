@@ -16,7 +16,7 @@ These are pass/fail. Failing either means the review does not ship at any score.
 
 ### G1 — Data fidelity
 
-**Every number in the review appears in the `trend_report.py` output.**
+**Every number in the review appears in the `scripts/trend_report.py` output.**
 
 Not "is consistent with." Appears in. If you wrote "you're averaging about 2,200
 calories," that figure must be in the JSON. Derived arithmetic done in your head — adding

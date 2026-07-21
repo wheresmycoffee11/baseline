@@ -33,7 +33,7 @@ Then ask for explicit acknowledgment: *"Are you good with that?"*
 Do not proceed without a clear yes. If they deflect or joke, ask once more plainly. If
 they decline, thank them and stop — don't negotiate.
 
-Record the date of acknowledgment in `profile.md`.
+Record the date of acknowledgment in `health/profile.md`.
 
 ## Step 2 — Health screen
 
@@ -54,7 +54,7 @@ Handle per `reference/safety.md`:
   consolation.
 - **Pregnant or nursing** → no deficit, no weight goal. Offer training and habit support
   only, with a clinician in the loop.
-- **Diagnosed condition** → proceed, but note it in `profile.md` and tell them to run the
+- **Diagnosed condition** → proceed, but note it in `health/profile.md` and tell them to run the
   plan past their clinician before starting.
 - **Medication affecting heart rate** (beta blockers and similar) → set
   `medications_affecting_hr: true`. HRV and resting heart rate stop being valid recovery
@@ -136,7 +136,10 @@ some configurations and their absence is silent:
 `step_count` · `active_energy` · `basal_energy_burned` · `apple_exercise_time` ·
 `dietary_energy` · `protein` · `carbohydrates` · `total_fat` · `fiber`
 
-Have them point its output at `health/data/inbox/`.
+Have them point its output at `health/data/inbox/`. **Mention the cost honestly**: the
+free tier has no export at all, and background automation needs Premium. The stock export
+path below is free and fully supported, so nobody is blocked — they're buying convenience,
+not capability. Don't let someone commit to a paid app without knowing that.
 
 **Stock export, once, for history.** iPhone → Health → their photo, top right → Export
 All Health Data → drop the `export.zip` in `health/data/inbox/`.
@@ -159,7 +162,7 @@ Show your work, then get confirmation before writing.
 
 **TDEE estimate** — RMR × activity factor (1.2 sedentary, 1.375 light, 1.55 moderate,
 1.725 heavy). Label it an estimate out loud. It gets replaced by the observed figure once
-`trend_report.py` has ~21 days of intake and weight to work from, and the observed number
+`scripts/trend_report.py` has ~21 days of intake and weight to work from, and the observed
 is frequently 200–300 kcal off the estimate in either direction.
 
 **Calorie target** — apply the deficit or surplus for the negotiated rate (a pound of fat
