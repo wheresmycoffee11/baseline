@@ -314,6 +314,49 @@ def recovery_section(rows, asof, targets):
     return out
 
 
+def patterns_section(rows, asof, targets):
+    """Weekday vs weekend splits.
+
+    Computed here rather than left to the coach because the framework requires checking
+    it on every adherence stop, and a number the coach works out by hand is a number it
+    can get wrong. This is the single most common leak pattern and it is invisible in a
+    weekly average: five disciplined days and two loose ones average out to something
+    that looks like mild overshoot everywhere.
+    """
+    subset = window_rows(rows, asof, 14)
+    weekday, weekend = [], []
+    for row in subset:
+        day = datetime.strptime(row["date"], "%Y-%m-%d")
+        (weekend if day.weekday() >= 5 else weekday).append(row)
+
+    def summarize(group, label):
+        out = {"days": len(group)}
+        for column, key in (("calories_in", "calories_mean"), ("protein_g", "protein_mean"),
+                            ("steps", "steps_mean"), ("sleep_hrs", "sleep_mean")):
+            values = series(group, column)
+            out[key] = rounded(mean(values), 1 if column != "steps" else 0)
+            if column == "calories_in":
+                out["logged_days"] = len(values)
+                out["unlogged_days"] = len(group) - len(values)
+        return out
+
+    out = {
+        "window_days": 14,
+        "weekday": summarize(weekday, "weekday"),
+        "weekend": summarize(weekend, "weekend"),
+    }
+
+    target = targets.get("calorie_target")
+    wk, we = out["weekday"].get("calories_mean"), out["weekend"].get("calories_mean")
+    if target and wk is not None and we is not None:
+        out["weekday_vs_target"] = rounded(wk - target, 0)
+        out["weekend_vs_target"] = rounded(we - target, 0)
+        out["weekend_minus_weekday"] = rounded(we - wk, 0)
+        # Weekly cost of the weekend gap, in calories. Two days, so double it.
+        out["weekly_excess_from_weekend"] = rounded(max(0.0, we - target) * 2, 0)
+    return out
+
+
 def training_section(rows, asof, targets):
     out = {"windows": {}}
     for days in WINDOWS:
@@ -447,6 +490,7 @@ def build(rows, targets, asof):
     energy = energy_section(rows, asof, targets, units)
     recovery = recovery_section(rows, asof, targets)
     training = training_section(rows, asof, targets)
+    patterns = patterns_section(rows, asof, targets)
     flags = flags_section(weight, recovery, intake, coverage, targets)
 
     report = {
@@ -459,6 +503,7 @@ def build(rows, targets, asof):
         "energy": energy,
         "recovery": recovery,
         "training": training,
+        "patterns": patterns,
         "flags": flags,
     }
 
@@ -478,6 +523,14 @@ def build(rows, targets, asof):
                                intake["windows"]["7d"].get("protein_mean")}},
         }
         report["energy"] = {"suppressed": True, "reason": "habit_only mode."}
+        report["patterns"] = {
+            "suppressed": True,
+            "reason": "habit_only mode — calorie pattern analysis is withheld.",
+            "weekday": {"steps_mean": patterns["weekday"].get("steps_mean"),
+                        "sleep_mean": patterns["weekday"].get("sleep_mean")},
+            "weekend": {"steps_mean": patterns["weekend"].get("steps_mean"),
+                        "sleep_mean": patterns["weekend"].get("sleep_mean")},
+        }
         report["flags"] = [f for f in flags if f["id"] not in
                            ("loss_too_fast", "intake_below_floor")]
 
